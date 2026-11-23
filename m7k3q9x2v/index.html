@@ -1,0 +1,400 @@
+<!doctype html><html><head><meta charset=utf8><meta name="robots" content="noindex, nofollow"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Identity Ecosystem Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: the identity stack as a matrix. Six layers (rows, root of trust at the bottom) against four kinds of identity (columns). Technologies run along the top, frameworks along the bottom; a reading panel explains whatever is selected. Single light "paper" world, matching the Phase 1 Gig map. */
+:root{
+  color-scheme:light;
+  --paper:#FAFAF8; --card:#FFFFFF; --ink:#212121; --dg:#4C4C4C; --mg:#666666; --line:rgba(0,0,0,.12); --soft:#F2F4F3;
+  --fa:#005656; --fd:#003134; --h1:#EEF5F4; --h2:#CFE6E2; --h3:#8FCBC1; --hi:#E3F3EF;
+  --core:#005656; --adding:#02B871; --partial:#6EC9BE; --absent:#E08A62;
+  --f:"Libre Franklin","Franklin Gothic Medium",Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{background:var(--paper);color:var(--ink)}
+body{font-family:var(--f);font-size:14px;line-height:1.5;padding-inline:20px;padding-block:24px 48px}
+.pg{max-width:1400px;margin-inline:auto;display:grid;gap:16px}
+h1,h2,h3{margin:0;text-wrap:balance}
+p{margin:0}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--fa);outline-offset:2px}
+
+.hd{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between;align-items:flex-end;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--mg)}
+h1{font-size:28px;font-weight:700;margin-top:4px}
+.sub{font-style:italic;color:var(--dg);margin-top:4px;max-width:78ch}
+.legend{display:grid;gap:6px;font-size:12px;color:var(--dg)}
+.lg-row{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center}
+.sw{display:inline-block;width:18px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:4px;border:1px solid var(--line)}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:4px;vertical-align:-1px}
+
+.ctrls{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.cl{font-size:11px;letter-spacing:.16em;color:var(--mg);text-transform:uppercase;margin-right:2px}
+.cb{font-size:12.5px;padding:6px 11px;border-radius:5px;border:1px solid var(--line);background:var(--card);color:var(--dg);cursor:pointer}
+.cb:hover{border-color:var(--fa);color:var(--fa)}
+.cb[aria-pressed="true"]{background:var(--fa);color:#fff;border-color:var(--fa)}
+.sep{width:1px;height:22px;background:var(--line);margin-inline:6px}
+
+.board{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:16px;display:grid;gap:14px}
+.scroll{overflow-x:auto}
+.inner{min-width:1020px;display:grid;gap:12px}
+.band{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:start}
+.band .bl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mg);padding-top:6px}
+.band .bl b{display:block;font-size:13px;letter-spacing:0;text-transform:none;color:var(--ink);margin-bottom:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:4px 9px;border-radius:999px;border:1px solid var(--line);background:var(--card);cursor:pointer;white-space:nowrap}
+.chip:hover,.chip.on{border-color:var(--fa);color:var(--fa);background:var(--hi)}
+.chip .rg{font-size:10px;font-weight:700;color:var(--mg);margin-right:5px}
+.fwgroups{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.fwg h4{margin:0 0 6px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dg)}
+
+.matrix{display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));gap:6px}
+.colh{padding:10px 10px 8px;border-radius:6px;background:var(--soft);cursor:pointer;border:1px solid transparent}
+.colh:hover{border-color:var(--fa)}
+.colh b{display:block;font-size:14px}
+.colh span{font-size:11.5px;color:var(--dg)}
+.colh.ws{background:var(--fa);color:#fff}
+.colh.ws span{color:#CFE6E2}
+.rowh{padding:10px;border-radius:6px;background:var(--soft);cursor:pointer;border:1px solid transparent;display:grid;gap:2px;align-content:start}
+.rowh:hover{border-color:var(--fa)}
+.rowh .n{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mg)}
+.rowh b{font-size:14px}
+.rowh i{font-size:11.5px;color:var(--dg)}
+.cell{position:relative;border-radius:6px;padding:10px 10px 9px;cursor:pointer;border:1px solid var(--line);display:grid;gap:6px;align-content:start;min-height:112px;transition:opacity .25s, box-shadow .2s}
+.cell[data-heat="1"]{background:var(--h1)}
+.cell[data-heat="2"]{background:var(--h2)}
+.cell[data-heat="3"]{background:var(--h3)}
+.cell.ws{border:1.5px solid var(--fa)}
+.cell:hover{box-shadow:0 0 0 2px var(--fa) inset}
+.cell.sel{box-shadow:0 0 0 3px var(--fd) inset}
+.cell .ct{font-size:12.5px;font-weight:600;line-height:1.35;padding-right:18px}
+.cell .ps{display:flex;flex-wrap:wrap;gap:4px}
+.cell .p{font-size:11px;padding:1px 6px;border-radius:4px;background:rgba(255,255,255,.75);white-space:nowrap}
+.cell .fa{position:absolute;top:8px;right:8px;width:12px;height:12px;border-radius:50%;border:2px solid #fff}
+.cell .step{position:absolute;top:-8px;left:-8px;width:22px;height:22px;border-radius:50%;background:var(--fd);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;border:2px solid #fff}
+.dim{opacity:.22}
+.lit{box-shadow:0 0 0 2px var(--fa) inset}
+@media (prefers-reduced-motion:reduce){.cell{transition:none}}
+
+.nr{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:14px 18px;font-size:13.5px}
+.nr.empty{color:var(--mg);font-style:italic}
+.nr b{color:var(--fa);display:block;margin-bottom:4px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:20px;display:grid;gap:16px}
+.ph h2{font-size:21px}
+.ph .q{font-style:italic;color:var(--dg);margin-top:4px}
+.ph .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:12px;color:var(--mg)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--line);color:var(--ink)}
+.so{border-left:3px solid var(--fa);padding:10px 14px;background:#F4F8F7;border-radius:0 6px 6px 0;font-size:13.5px}
+.so b{color:var(--fa)}
+.cols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+@media (max-width:980px){.cols{grid-template-columns:minmax(0,1fr)}}
+.col{min-width:0;display:grid;gap:8px;align-content:start}
+.col h3{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--mg);font-weight:600}
+.it{border-top:1px solid var(--line);padding-top:8px;font-size:13px}
+.it b{display:block}
+.it .m{font-size:11.5px;color:var(--mg)}
+.it .m a{color:var(--mg)}
+.sig{display:grid;grid-template-columns:auto minmax(0,1fr);gap:2px 10px}
+.rgt{font-size:10.5px;font-weight:700;letter-spacing:.05em;padding:2px 6px;border-radius:4px;background:#EEF3F2;color:var(--fa);height:fit-content;white-space:nowrap}
+.rgt.out{background:var(--fa);color:#fff}
+.sig .m{grid-column:2}
+.plist{display:flex;flex-wrap:wrap;gap:6px}
+.pl{font-size:12.5px;padding:3px 9px;border-radius:5px;background:var(--soft);white-space:nowrap}
+.pl small{color:var(--mg);margin-left:4px}
+.pl.nonus{background:#E3F3EF;box-shadow:inset 0 0 0 1px rgba(0,86,86,.25)}
+.none{color:var(--mg);font-style:italic;font-size:13px}
+.ft{display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;font-size:11.5px;color:var(--mg);border-top:1px solid var(--line);padding-top:12px}
+</style>
+
+<div class="pg">
+  <header class="hd">
+    <div>
+      <div class="eyebrow">Identity, beyond screening</div>
+      <h1>Identity ecosystem map</h1>
+      <p class="sub">The identity stack, from the records that first vouch for a person up to ongoing assurance, set against whose identity is being verified. Technologies run along the top, rules along the bottom. FA works in one column; the market is moving across all four.</p>
+    </div>
+    <div class="legend">
+      <div class="lg-row"><span class="eyebrow" style="letter-spacing:.12em">Activity</span><span><i class="sw" style="background:var(--h1)"></i>Early</span><span><i class="sw" style="background:var(--h2)"></i>Active</span><span><i class="sw" style="background:var(--h3)"></i>Moving fast</span></div>
+      <div class="lg-row"><span class="eyebrow" style="letter-spacing:.12em">FA today</span><span><i class="dot" style="background:var(--core)"></i>Core</span><span><i class="dot" style="background:var(--adding)"></i>Adding</span><span><i class="dot" style="background:var(--partial)"></i>Partial</span><span><i class="dot" style="background:var(--absent)"></i>Absent</span></div>
+    </div>
+  </header>
+
+  <div class="ctrls">
+    <span class="cl">Trace a movement</span><span id="mvBtns" style="display:contents"></span>
+    <span class="sep" aria-hidden="true"></span>
+    <span class="cl">Signals from</span><span id="rgBtns" style="display:contents"></span>
+  </div>
+
+  <div class="board">
+    <div class="scroll"><div class="inner">
+      <div class="band"><div class="bl"><b>Technologies</b>What it runs on</div><div class="chips" id="tech"></div></div>
+      <div class="matrix" id="matrix" role="grid" aria-label="Identity stack by kind of identity"></div>
+      <div class="band"><div class="bl"><b>Frameworks</b>Rules and standards</div><div class="fwgroups" id="fw"></div></div>
+    </div></div>
+  </div>
+
+  <div class="nr empty" id="nr">Trace a movement to see how a shift travels across layers and kinds of identity. Click any cell, layer, column, technology or framework to read it.</div>
+
+  <section class="panel" id="panel" aria-live="polite"></section>
+
+  <div class="ft"><div>Rival Strategy for First Advantage · 2027–28 planning input · Working draft v2</div><div>Sources as of 30 Sep 2026 · "FA today" is Rival's assessment, to validate with FA product · Private and confidential</div></div>
+</div>
+
+<script>
+(() => {
+const FA = {Core:"var(--core)",Adding:"var(--adding)",Partial:"var(--partial)",Absent:"var(--absent)"};
+const COLS = [
+ {id:"wf", name:"Workforce", who:"Employees, contractors, gig workers", line:"FA's market. Identity is moving from the HR check into the hire-to-login journey.", size:"Core screening $4.5–6bn (William Blair, 2024)"},
+ {id:"cx", name:"Consumer", who:"Customers, users, minors", line:"The largest and fastest market. Its vendors are now moving into hiring.", size:"Identity verification ~$14–19bn; customer identity and access ~$14bn (2025)"},
+ {id:"gov", name:"Citizen", who:"Government services and benefits", line:"Governments build the root and the wallet; what they do here decides what everyone else can skip.", size:"Aadhaar 2.31bn authentications in Nov 2025 alone"},
+ {id:"nhi", name:"Machines and agents", who:"Workloads, bots, AI agents", line:"Machine identities outnumber people 82 to 1. Agents acting for people are next.", size:"Non-human identity management ~$11bn (2025, single estimate)"},
+];
+const LAYERS = [ // top to bottom
+ {id:"L6", n:"6", name:"Assurance and risk", verb:"Monitor", q:"Is anything wrong, now or later?",
+  trends:[["From event to process","Checks repeat after onboarding: rescreening, monitoring, risk scoring."],["Passive signals","Device, behaviour and network data replace questions asked of the person."],["Defending the capture itself","Attacks inject fake video straight into the camera feed; detection follows."]]},
+ {id:"L5", n:"5", name:"Access", verb:"Authenticate", q:"Is it still them, logging in now?",
+  trends:[["Passwordless","Passkeys replace passwords for staff and customers."],["Identity at recovery","Help-desk resets and account recovery become the weak point, so proofing moves there."],["Non-human access","Most identities in a company now belong to software, not people."]]},
+ {id:"L4", n:"4", name:"Attributes", verb:"Qualify", q:"What is true about them, and are they allowed?",
+  trends:[["Verify at source","Employment, income and licence data pulled directly from systems of record."],["Age becomes mass market","Age checks now run in the tens of millions as laws spread."],["Prove one fact","Show you are over 18 or allowed to work without revealing the whole document."]]},
+ {id:"L3", n:"3", name:"Proofing", verb:"Establish", q:"Is this person real, and the person on the document?",
+  trends:[["Liveness as baseline","Face match with liveness is now the default, not a premium."],["Read the chip","Reading a passport's chip replaces photographing it."],["Proofing moves to hiring","Consumer verification vendors now sell candidate checks."]]},
+ {id:"L2", n:"2", name:"Credentials", verb:"Carry", q:"Can proof travel with the person?",
+  trends:[["State wallets","Governments put ID on phones and require businesses to accept it."],["Employer-issued credentials","Employers issue staff a verifiable credential of employment."],["Standards settle","W3C, OpenID and ISO specifications reached final versions in 2025."]]},
+ {id:"L1", n:"1", name:"Root of trust", verb:"Issue", q:"Who first vouches for this person?",
+  trends:[["Government as anchor","National ID systems become the root other checks rely on."],["Data as identity","Bureaus and graphs combine records into identity signals."],["Machines get issuers","Certificates and workload identities become the root for software."]]},
+];
+const C = { // [heat, text, players [name,hq], fa?]
+ L6:{ wf:[2,"Continuous monitoring, rescreening and fraudulent-hire detection",[["First Advantage","US"],["HireRight","US"],["Checkr","US"],["HYPR","US"],["DTEX","US"]],"Partial"],
+      cx:[3,"Fraud signals, device and behavioural biometrics, deepfake and injection detection",[["Socure","US"],["LexisNexis Risk","US"],["BioCatch → Visa","IL"],["Sardine","US"],["iProov","UK"],["Reality Defender","US"]]],
+      gov:[2,"Benefits and tax fraud detection behind government sign-up",[["ID.me","US"],["LexisNexis Risk","US"],["Socure","US"]]],
+      nhi:[2,"Threat detection for machine identities and agent behaviour",[["Palo Alto / CyberArk","US"],["CrowdStrike","US"],["Astrix","IL"]]] },
+ L5:{ wf:[3,"Workforce access management, MFA, passkeys, help-desk identity checks",[["Okta","US"],["Microsoft Entra","US"],["Ping Identity","US"],["Cisco Duo","US"],["HYPR","US"],["CLEAR","US"]],"Absent"],
+      cx:[3,"Customer identity and access, passkeys at scale",[["Okta / Auth0","US"],["Ping Identity","US"],["Transmit Security","US"],["Apple","US"],["Google","US"]]],
+      gov:[2,"Single government sign-in",[["Login.gov","US"],["GOV.UK One Login","UK"],["Singpass","SG"]]],
+      nhi:[3,"Secrets, workload and agent access",[["Palo Alto / CyberArk","US"],["Oasis Security","IL"],["Aembit","US"],["HashiCorp (IBM)","US"],["Okta for AI Agents","US"]]] },
+ L4:{ wf:[2,"Criminal history, employment, education, licences, right to work, drug and health",[["First Advantage","US"],["HireRight","US"],["Checkr + Truv","US"],["Equifax (The Work Number)","US"],["Accurate","US"]],"Core"],
+      cx:[3,"Age, sanctions and AML screening, address, income",[["Yoti","UK"],["LexisNexis Risk","US"],["ComplyAdvantage","UK"],["Experian","IE"],["Plaid","US"]]],
+      gov:[2,"Benefits eligibility and residency, pulled from government data",[["Myinfo","SG"],["API Setu / DigiLocker","IN"],["UK Home Office eVisas","UK"]]],
+      nhi:[1,"What an agent may do and for whom: delegated authority",[["Visa","US"],["Mastercard","US"],["Ant International","SG"],["Trulioo","CA"]]] },
+ L3:{ wf:[3,"Identity-first screening and candidate checks at application",[["First Advantage","US"],["Persona","US"],["Checkr","US"],["CLEAR","US"],["Deel (Clarity)","US"],["Yoti","UK"]],"Adding"],
+      cx:[3,"Onboarding: document, chip, selfie and liveness",[["Jumio","US"],["Onfido / Entrust","UK"],["Veriff","EE"],["Sumsub","UK"],["Incode","US"],["Mitek","US"],["AU10TIX","IL"],["IDnow","DE"],["Signicat","NO"],["GBG","UK"]]],
+      gov:[3,"Government-grade proofing for services",[["ID.me","US"],["Login.gov","US"],["GOV.UK One Login","UK"]]],
+      nhi:[1,"Tying an agent to a verified owner",[["Trulioo","CA"],["Worldpay","US"],["World","US"]]] },
+ L2:{ wf:[1,"Employer-issued credentials and reusable screening results",[["Okta Work IDs","US"],["Microsoft Entra Verified ID","US"],["Trua","US"],["Yoti","UK"]],"Absent"],
+      cx:[3,"Phone wallets, mobile driving licences, reusable identity",[["Apple","US"],["Google","US"],["CLEAR","US"],["Yoti","UK"],["SpruceID","US"]]],
+      gov:[3,"National wallets and digital documents",[["EU wallets","EU"],["Singpass","SG"],["DigiLocker","IN"],["US state DMVs","US"],["IDEMIA","FR"],["Thales","FR"]]],
+      nhi:[2,"Signed agent and workload credentials",[["Visa Trusted Agent Protocol","US"],["Microsoft Entra Agent ID","US"],["SPIFFE (standard)","US"]]] },
+ L1:{ wf:[2,"Court, police and right-to-work records; social security and E-Verify",[["First Advantage records","US"],["US SSA / E-Verify","US"],["UK Home Office","UK"],["Court systems","US"]],"Core"],
+      cx:[2,"Credit, telecoms and bank data as identity anchors",[["Experian","IE"],["Equifax","US"],["TransUnion","US"],["LexisNexis Risk","US"]]],
+      gov:[3,"Civil registries, passports and national ID numbers",[["UIDAI (Aadhaar)","IN"],["Passport offices","Global"],["National registries","Global"]]],
+      nhi:[2,"Certificate authorities and workload identity issuers",[["DigiCert","US"],["Venafi (Palo Alto)","US"],["AWS","US"],["Microsoft","US"]]] },
+};
+const TECH = [
+ ["Passkeys (FIDO2)","Phishing-resistant login using a key held on the device.","About 5bn passkeys in use; 68% of enterprises deploying for staff (FIDO Alliance, May 2026).",["L5"]],
+ ["Chip reading (ICAO)","Reads the signed chip in a passport or ID card to prove it is genuine.","Standard in UK and EU proofing; required by UK certified providers.",["L3"]],
+ ["Face match and liveness","Matches a selfie to the document and checks a live person is present (ISO/IEC 30107-3).","Now baseline; tested by labs such as iBeta.",["L3"]],
+ ["Injection attack detection","Spots fake video injected straight into the capture feed (CEN/TS 18099).","Injection attacks +40% year on year (Entrust, Nov 2025); ISO version in development.",["L3","L6"]],
+ ["Deepfake detection","Detects synthetic faces, voices and documents.","Deepfakes behind 1 in 5 biometric fraud attempts (Entrust, Nov 2025).",["L3","L6"]],
+ ["Behavioural and device signals","Passive signals from how a person types, swipes and which device they use.","Visa buying BioCatch for $2.4bn (Aug 2026).",["L5","L6"]],
+ ["Identity graphs","Pooled records and network signals that link identities across companies.","Experian bought AtData (Feb 2026); Socure bought Effectiv (Oct 2024).",["L1","L6"]],
+ ["Mobile driving licences","Driving licence on a phone (ISO/IEC 18013-5 in person, 18013-7 online).","TSA accepts them at 250+ checkpoints; online standard published 2025.",["L2"]],
+ ["Verifiable credentials","A signed digital credential any party can check (W3C VC 2.0).","W3C Recommendation, May 2025.",["L2"]],
+ ["Wallet protocols (OpenID4VP/VCI)","How wallets receive and present credentials.","Final 1.0 specifications, Jul and Sep 2025.",["L2"]],
+ ["Selective disclosure and zero-knowledge","Prove one fact (over 18, allowed to work) without revealing the rest.","SD-JWT published as RFC 9901 (Nov 2025); Google open-sourced its age-proof libraries (Jul 2025).",["L2","L4"]],
+ ["Content provenance (C2PA)","Signed metadata showing where an image or video came from.","Pixel 10 signs photos by default; under 1% of news images carry it.",["L6"]],
+ ["Workload identity and PKI","Certificates and identities issued to software and agents.","Machine identities outnumber humans 82 to 1 (CyberArk, Apr 2025).",["L1","L5"]],
+];
+const FW = [ // name, region, what, status, layers, cols
+ ["NIST SP 800-63-4","US","Federal digital identity guidelines: assurance levels for proofing and login.","Final Jul 2025; adds wallets, mobile licences and deepfake guidance. Kantara certifies against it.",["L3","L5"],["gov","wf","cx"]],
+ ["FCRA","US","Governs background reports used for employment.","Unchanged; CFPB withdrew related guidance in 2025, enforcement continues.",["L4"],["wf"]],
+ ["KYC / CIP","US","Bank customer identification rules.","In force.",["L3","L4"],["cx"]],
+ ["State AI-in-hiring laws","US","Notice and explanation for automated hiring decisions.","Colorado from 1 Jan 2027; Illinois from Jan 2026; NYC Local Law 144.",["L4","L6"],["wf"]],
+ ["State age-verification laws","US","App stores and adult sites must check age.","Texas in force (Apple enforcing Jun 2026); Utah from May 2026.",["L4"],["cx"]],
+ ["PBSA accreditation","US","Background screening industry accreditation.","FA accredited Jul 2024; a procurement signal.",["L4"],["wf"]],
+ ["UK trust framework (DIATF)","UK","Certification for digital verification providers.","Statutory register live Dec 2025; framework v1.0 from Sep 2026.",["L3","L4"],["wf","cx"]],
+ ["Online Safety Act","UK","Platforms must check users' age.","69m+ age checks in H2 2025; enforcement active.",["L4"],["cx"]],
+ ["Right to work regime","UK","Employers must check right to work.","Mandatory; fines up to £60k per worker. National digital ID still in flux after the change of government.",["L4"],["wf"]],
+ ["eIDAS 2.0 and EU wallet","EU","Every state must offer an identity wallet.","Wallets due 24 Dec 2026; architecture v3.0 Jul 2026; acceptance by ~Dec 2027.",["L2","L3"],["gov","cx","wf"]],
+ ["AMLR","EU","Single EU anti-money-laundering rulebook.","Applies from 10 Jul 2027.",["L3","L4"],["cx"]],
+ ["AI Act","EU","Hiring AI and biometrics classed as high-risk.","Obligations moved to 2 Dec 2027.",["L3","L4","L6"],["wf","cx"]],
+ ["GDPR Article 10","EU","Limits processing of criminal-record data.","Unchanged; rules vary by member state.",["L4"],["wf"]],
+ ["Platform Work Directive","EU","Gig workers presumed employees.","National law due 2 Dec 2026.",["L4","L6"],["wf"]],
+ ["EU age verification app","EU","Commission's privacy-preserving age proof.","Released Apr 2026; joins wallets by end-2026.",["L2","L4"],["cx"]],
+ ["FATF Recommendation 10","Global","Global standard for customer due diligence.","Amended Feb 2025: remote onboarding no longer treated as higher risk by default.",["L3"],["cx"]],
+ ["India DPDP","APAC","Consent-based data protection.","Rules Nov 2025; full obligations 13 May 2027.",["L4","L6"],["wf","cx","gov"]],
+ ["Australia Digital ID Act","APAC","Government digital ID system.","Opens to private sector 30 Nov 2026; requires ISO 27001.",["L2","L3"],["gov","cx"]],
+ ["Singapore app-store age code","APAC","App stores must screen out under-18s.","Effective 1 Apr 2026, using Singpass or face age estimation.",["L4"],["cx"]],
+ ["ISO 27001 / SOC 2","Global","Security certifications.","Standard procurement gates for any identity vendor.",["L1","L5","L6"],["wf","cx","gov","nhi"]],
+];
+const SIG = [ // region, text, source, date, url, layers, cols
+ ["US","Persona launched Candidate Verification, integrated with Greenhouse, Workday, Ashby and Okta","Persona via PR Newswire","Mar 2026","https://www.streetinsider.com/PRNewswire/Persona+Launches+Candidate+Verification+to+Stop+Hiring+Fraud+Before+Day+One/26144703.html",["L3"],["wf","cx"]],
+ ["US","Deel bought Clarity to verify identity from sourcing through to IT access","Deel","Aug 2026","https://www.deel.com/blog/deel-acquires-clarity/",["L3","L6"],["wf"]],
+ ["US","CLEAR deployed for workforce identity at T-Mobile","CLEAR via Nasdaq","Jun 2025","https://www.nasdaq.com/press-release/clear-t-mobile-modernize-workforce-identity-verification-strengthen-enterprise",["L3","L5"],["wf"]],
+ ["US","Okta launched Work IDs: employer-issued verifiable credentials for proof of employment","Okta","Jan 2026","https://www.okta.com/blog/product-innovation/okta-work-ids-workforce-trust/",["L2","L5"],["wf"]],
+ ["US","Checkr bought Truework, then Truv; claims a $45bn verification market","HousingWire; Pulse 2.0","2025 · Aug 2026","https://www.housingwire.com/articles/checkr-acquires-truv-mortgage-government-income-verification/",["L4"],["wf"]],
+ ["US","42% of fraudulent hires obtained system credentials before detection","HYPR","Sep 2026","https://www.infosecurity-magazine.com/news/fraudulent-hires-credentials/",["L5","L6"],["wf"]],
+ ["Global","82% of CHROs rescreen or monitor; 89% of employers plan to add screening or ID tools","FA Global Trends Report","Jan 2026","",["L6","L3"],["wf"]],
+ ["Global","Gartner: 1 in 4 candidate profiles will be fake by 2028","Gartner via HR Dive","Aug 2025","https://www.hrdive.com/news/fake-job-candidates-ai/757126/",["L3","L6"],["wf"]],
+ ["US","North Korean IT-worker schemes placed workers at 100+ US companies","US DOJ","Jun 2025","https://www.securityweek.com/us-storms-29-laptop-farms-in-crackdown-on-north-korean-it-worker-schemes/amp/",["L3","L6"],["wf"]],
+ ["Global","Deepfakes behind 1 in 5 biometric fraud attempts; injection attacks +40%","Entrust Identity Fraud Report","Nov 2025","https://www.entrust.com/company/newsroom/deepfakes-social-engineering-and-injection-attacks-on-the-rise",["L3","L6"],["cx"]],
+ ["US","Visa agreed to buy BioCatch (behavioural biometrics) for $2.4bn","Biometric Update","Aug 2026","https://www.biometricupdate.com/202608/visa-acquires-behavioral-biometrics-pioneer-biocatch-amid-fraud-prevention-build-up",["L6","L5"],["cx"]],
+ ["US","Reported US consumer fraud losses reached $15.9bn in 2025","FTC","Mar 2026","https://www.ftc.gov/news-events/news/press-releases/2026/03/ftc-testifies-joint-economic-committee-agencys-efforts-combat-fraud",["L6"],["cx"]],
+ ["UK","69m+ age checks across 32 services in H2 2025, 23 times the previous six months","Ofcom via Lewis Silkin","Jul 2026","https://www.lewissilkin.com/insights/2026/07/16/ofcom-warns-that-tougher-action-is-needed-on-age-assurance-following-publication-102nc4m",["L4"],["cx"]],
+ ["APAC","Australia's under-16 social media ban: 4.7m accounts removed or restricted in the first month","Reuters via Business Today","Jan 2026","https://www.businesstoday.in/amp/technology/news/story/australia-enforces-worlds-first-under-16-social-media-ban-removes-47-million-accounts-511166-2026-01-16",["L4"],["cx"]],
+ ["EU","EU age verification app released; joins national wallets by end-2026","European Commission","Apr 2026","https://digital-strategy.ec.europa.eu/en/policies/eu-age-verification",["L2","L4"],["cx","gov"]],
+ ["Global","About 5bn passkeys in use; 68% of enterprises deploying for staff","FIDO Alliance","May 2026","https://fidoalliance.org/fido-alliance-reports-accelerating-global-passkey-adoption-on-world-passkey-day-2026/",["L5"],["cx","wf"]],
+ ["EU","Fourthline and Veridas merged; Experian bought AtData","Biometric Update; Experian","Feb–Jul 2026","https://www.biometricupdate.com/202607/fourthline-veridas-merge-to-build-global-identity-and-compliance-platform",["L3","L1"],["cx"]],
+ ["US","Persona raised $200m at a $2bn valuation; Incode bought AuthenticID","FinTech Global; Incode","Apr–Aug 2025","https://fintech.global/2025/04/30/identity-verification-firm-persona-hits-2bn-valuation-following-200m-funding-round/",["L3"],["cx"]],
+ ["APAC","Aadhaar recorded 2.31bn authentications in Nov 2025; face authentications more than doubled","UIDAI","Dec 2025","https://uidai.gov.in/images/UIDAI_records_231_crore_Aadhaar_authentication_transactions_in_November_2025.pdf",["L1","L3"],["gov"]],
+ ["US","ID.me reached 157m users, ~80m verified to federal standard; raised $340m","Sacra","Dec 2025","https://sacra.com/c/id-me",["L3"],["gov"]],
+ ["US","Login.gov moving to NIST 800-63-4 assessment and plans to accept mobile licences in 2026","Login.gov","May 2026","https://zendesk.login.gov/hc/en-us/articles/52611715752980-May-2026-Partner-Newsletter",["L3","L2"],["gov"]],
+ ["EU","EU wallet architecture v3.0 and conformance framework published; wallets due 24 Dec 2026","Biometric Update","Jul 2026","https://www.biometricupdate.com/202607/conformance-framework-for-eu-digital-identity-wallets-arrives-with-arf-v3-0",["L2"],["gov","cx"]],
+ ["APAC","Singpass covers 97% of adults; app stores must screen out under-18s from Apr 2026","GovTech; The Star","Mar–Jun 2026","https://www.thestar.com.my/aseanplus/aseanplus-news/2026/03/31/app-stores-to-screen-for-singapore-users-under-18-via-singpass-facial-scan-credit-card",["L2","L4"],["gov","cx"]],
+ ["UK","Statutory register of certified verification providers live; right-to-work code in place","GOV.UK; DSIT","Dec 2025 – Jul 2026","https://enablingdigitalidentity.blog.gov.uk/2025/12/01/dvs-measures-in-the-data-act-have-come-into-force/",["L3","L4"],["wf","cx"]],
+ ["UK","National digital ID still in flux: announced Sep 2025 for right to work, made voluntary Jan 2026, direction uncertain after the change of government","Pinsent Masons; Full Fact","2026","https://fullfact.org/government-tracker/digital-id/",["L2","L1"],["gov","wf"]],
+ ["Global","Machine identities outnumber humans 82 to 1; 42% have privileged access","CyberArk","Apr 2025","https://www.silicon.co.uk/press-release/machine-identities-outnumber-humans-by-more-than-80-to-1-new-report-exposes-the-exponential-threats-of-fragmented-identity-security",["L5","L1"],["nhi"]],
+ ["US","Palo Alto closed its ~$25bn CyberArk deal, including Venafi machine identity","Start with Identity","Feb 2026","https://startwithidentity.com/blog/2026-02-11-palo-alto-networks-completes-cyberark-acquisition/",["L5","L6","L1"],["nhi","wf"]],
+ ["US","Oasis Security raised $120m for non-human identity","raising.fi","Mar 2026","https://raising.fi/news/oasis-security-series-a-march-2026",["L5"],["nhi"]],
+ ["APAC","Ant International, Mastercard and Visa start a know-your-agent framework via Singapore's central bank","The Asian Banker","Sep 2026","",["L4","L2"],["nhi"]],
+ ["US","Visa Trusted Agent Protocol and Mastercard Agent Pay launched","Visa; Mastercard","Apr–Oct 2025","https://usa.visa.com/about-visa/newsroom/press-releases.releaseId.21716.html",["L2","L4"],["nhi","cx"]],
+ ["EU","Estonia examines legal ID codes for AI agents acting for people","OECD.AI","Sep 2026","",["L1","L4"],["nhi","gov"]],
+];
+const MOVES = [
+ {id:"cross", title:"Consumer vendors cross into hiring", cells:[["L3","cx"],["L3","wf"],["L5","wf"],["L6","wf"]],
+  text:"The vendors that verify customers are now selling into hiring. Persona launched candidate checks inside Greenhouse and Workday (Mar 2026); CLEAR runs workforce identity at T-Mobile; Deel bought Clarity. Each path runs from proofing at application through to login and monitoring, which is the journey FA only partly covers."},
+ {id:"wallet", title:"Wallets absorb the basic check", cells:[["L1","gov"],["L2","gov"],["L2","cx"],["L3","cx"],["L4","wf"]],
+  text:"Governments anchor identity (Aadhaar, passports) and put it in wallets (EU, Singpass, mobile licences). When a wallet proves the document, proofing becomes cheap. Value moves up the stack to attributes the wallet can't prove: work history, licences, criminal records."},
+ {id:"attack", title:"Attacks move into the camera", cells:[["L6","cx"],["L3","cx"],["L3","wf"],["L5","wf"]],
+  text:"Deepfakes and injected video defeat selfie checks (injection attacks +40%). Defences move into proofing as standards (CEN/TS 18099, liveness testing) and then to login and account recovery, where fraudulent hires get their credentials (42% before detection)."},
+ {id:"age", title:"Age makes identity a mass market", cells:[["L4","cx"],["L2","cx"],["L2","gov"],["L3","cx"]],
+  text:"Age laws in the UK, Australia, Singapore, Texas and Utah have turned age checks into a mass-market product (69m in the UK in six months). They are pushing selective disclosure and zero-knowledge proofs into wallets, which then makes the same privacy-preserving checks available for hiring."},
+ {id:"machines", title:"Machines outnumber people", cells:[["L1","nhi"],["L5","nhi"],["L6","nhi"],["L4","nhi"]],
+  text:"Software identities already outnumber people 82 to 1, and security vendors are consolidating them (Palo Alto and CyberArk). AI agents are next: payment networks are defining which agent may act for whom. In hiring, the first version is agents applying for candidates."},
+ {id:"bundle", title:"The check gets bundled", cells:[["L1","cx"],["L4","wf"],["L3","wf"],["L6","wf"]],
+  text:"Data owners and platforms are wrapping the background check. Checkr bought income and employment data (Truework, Truv); Equifax holds 209m active employment records; HR platforms embed checks by default. FA's core cell is approached from the layers below and beside it."},
+];
+
+// ---------- render ----------
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const S = { sel:{type:"cell", l:"L3", c:"wf"}, move:null, region:"all", hl:null };
+const isOut = r => r!=="US" && r!=="Global";
+const rMatch = r => S.region==="all" ? true : S.region==="out" ? isOut(r) : r===S.region;
+
+function renderMatrix(){
+  const m = $("#matrix"); let h = `<div></div>`;
+  COLS.forEach(c => h += `<div class="colh ${c.id==="wf"?"ws":""}" data-col="${c.id}" tabindex="0" role="columnheader"><b>${esc(c.name)}</b><span>${esc(c.who)}</span></div>`);
+  LAYERS.forEach(l => {
+    h += `<div class="rowh" data-layer="${l.id}" tabindex="0" role="rowheader"><span class="n">${l.n} · ${esc(l.verb)}</span><b>${esc(l.name)}</b><i>${esc(l.q)}</i></div>`;
+    COLS.forEach(c => { const x = C[l.id][c.id];
+      h += `<div class="cell ${c.id==="wf"?"ws":""}" data-l="${l.id}" data-c="${c.id}" data-heat="${x[0]}" tabindex="0" role="gridcell" aria-label="${esc(l.name+", "+c.name+": "+x[1])}">
+        ${x[3]?`<i class="fa" style="background:${FA[x[3]]}" title="FA today: ${x[3]}"></i>`:""}
+        <div class="ct">${esc(x[1])}</div>
+        <div class="ps">${x[2].slice(0,4).map(p=>`<span class="p">${esc(p[0])}</span>`).join("")}${x[2].length>4?`<span class="p">+${x[2].length-4}</span>`:""}</div>
+      </div>`; });
+  });
+  m.innerHTML = h;
+}
+function renderTech(){ $("#tech").innerHTML = TECH.map((t,i)=>`<button type="button" class="chip" data-tech="${i}">${esc(t[0])}</button>`).join(""); }
+function renderFw(){
+  const groups = [["US","United States"],["UK","United Kingdom"],["EU","European Union"],["Global","Global and APAC"]];
+  $("#fw").innerHTML = groups.map(([k,lab]) => `<div class="fwg"><h4>${lab}</h4><div class="chips">${FW.map((f,i)=>[f,i]).filter(([f])=> k==="Global" ? (f[1]==="Global"||f[1]==="APAC") : f[1]===k).map(([f,i])=>`<button type="button" class="chip" data-fw="${i}">${f[1]==="APAC"?'<span class="rg">APAC</span>':""}${esc(f[0])}</button>`).join("")}</div></div>`).join("");
+}
+
+// ---------- highlight ----------
+function clearMarks(){ document.querySelectorAll(".cell").forEach(c=>{c.classList.remove("dim","lit","sel"); c.querySelector(".step")?.remove();}); document.querySelectorAll(".chip").forEach(c=>c.classList.remove("on")); }
+function mark(){
+  clearMarks();
+  if (S.move){ const mv = MOVES.find(m=>m.id===S.move); const key = mv.cells.map(x=>x.join(":"));
+    document.querySelectorAll(".cell").forEach(c=>{ const k=c.dataset.l+":"+c.dataset.c, i=key.indexOf(k); if(i<0) c.classList.add("dim"); else { c.classList.add("lit"); const s=document.createElement("span"); s.className="step"; s.textContent=i+1; c.appendChild(s);} }); return; }
+  const s = S.sel;
+  if (s.type==="cell") document.querySelector(`.cell[data-l="${s.l}"][data-c="${s.c}"]`)?.classList.add("sel");
+  if (s.type==="layer") document.querySelectorAll(".cell").forEach(c=>c.classList.toggle("dim", c.dataset.l!==s.l));
+  if (s.type==="col") document.querySelectorAll(".cell").forEach(c=>c.classList.toggle("dim", c.dataset.c!==s.c));
+  if (s.type==="tech"){ const t=TECH[s.i]; document.querySelector(`[data-tech="${s.i}"]`).classList.add("on"); document.querySelectorAll(".cell").forEach(c=>c.classList.toggle("dim", !t[3].includes(c.dataset.l))); }
+  if (s.type==="fw"){ const f=FW[s.i]; document.querySelector(`[data-fw="${s.i}"]`).classList.add("on"); document.querySelectorAll(".cell").forEach(c=>c.classList.toggle("dim", !(f[4].includes(c.dataset.l) && f[5].includes(c.dataset.c)))); }
+}
+
+// ---------- panel ----------
+const sigHtml = list => list.length ? list.map(s=>`<div class="it sig"><span class="rgt ${isOut(s[0])?"out":""}">${esc(s[0])}</span><span>${esc(s[1])}</span><span class="m">${s[4]?`<a href="${esc(s[4])}" target="_blank" rel="noopener">${esc(s[2])}</a>`:esc(s[2])} · ${esc(s[3])}</span></div>`).join("") : `<p class="none">No signals ${S.region==="all"?"":"from this region "}logged here yet.</p>`;
+const playersHtml = ps => `<div class="plist">${ps.map(p=>`<span class="pl ${p[1]!=="US"?"nonus":""}">${esc(p[0])}<small>${esc(p[1])}</small></span>`).join("")}</div>`;
+const techFor = l => TECH.filter(t=>t[3].includes(l));
+const fwFor = (l,c) => FW.filter(f=>f[4].includes(l) && (!c || f[5].includes(c)));
+const listHtml = (arr, fn) => arr.length ? arr.map(fn).join("") : `<p class="none">None mapped.</p>`;
+const techItem = t => `<div class="it"><b>${esc(t[0])}</b>${esc(t[2])}</div>`;
+const fwItem = f => `<div class="it"><b>${esc(f[0])} <span class="m">· ${esc(f[1])}</span></b>${esc(f[3])}</div>`;
+const SO = {
+ "L6:wf":"FA has monitoring products, but the larger budget for catching a fraudulent hire after day one sits with security teams.",
+ "L5:wf":"FA is absent at login, which is where Persona, CLEAR and Okta now connect hiring checks to access. This is the bridge FA's 'identity-first' story needs.",
+ "L4:wf":"FA's core cell, and the one most directly approached: Checkr from income data, Equifax from employment records, HR platforms from embedded checks.",
+ "L3:wf":"The fastest-moving cell in FA's column. FA is adding capability through vendors while consumer specialists sell candidate checks directly into applicant tracking systems.",
+ "L2:wf":"Employers issuing staff a verifiable credential (Okta Work IDs) could make a screening result portable. Whoever issues it owns the relationship.",
+ "L1:wf":"FA's records access is an asset no consumer verification vendor has. It is the reason to defend layer 4 from below, not just compete in layer 3.",
+};
+function renderPanel(){
+  const s = S.sel, p = $("#panel"); let h = "";
+  if (s.type==="cell"){
+    const l = LAYERS.find(x=>x.id===s.l), c = COLS.find(x=>x.id===s.c), x = C[s.l][s.c];
+    const sigs = SIG.filter(g=>g[5].includes(s.l) && g[6].includes(s.c) && rMatch(g[0]));
+    h = `<div class="ph"><div class="eyebrow">Layer ${l.n} · ${esc(l.name)} × ${esc(c.name)}</div><h2>${esc(x[1])}</h2><p class="q">${esc(l.q)}</p>
+      <div class="meta">${x[3]?`<span class="pill"><i class="dot" style="background:${FA[x[3]]}"></i>FA today: ${x[3]}</span>`:""}<span>Activity: ${["","Early","Active","Moving fast"][x[0]]}</span></div></div>
+      ${SO[s.l+":"+s.c]?`<div class="so"><b>So what for FA.</b> ${esc(SO[s.l+":"+s.c])}</div>`:""}
+      <div class="cols"><div class="col"><h3>Who is playing</h3>${playersHtml(x[2])}<p class="none" style="font-style:normal;font-size:11.5px">Shaded: headquartered outside the US.</p></div>
+      <div class="col"><h3>Signals</h3>${sigHtml(sigs)}</div>
+      <div class="col"><h3>Technologies and rules</h3>${listHtml(techFor(s.l), techItem)}${listHtml(fwFor(s.l, s.c), fwItem)}</div></div>`;
+  } else if (s.type==="layer"){
+    const l = LAYERS.find(x=>x.id===s.l), sigs = SIG.filter(g=>g[5].includes(s.l) && rMatch(g[0]));
+    h = `<div class="ph"><div class="eyebrow">Layer ${l.n} · ${esc(l.verb)}</div><h2>${esc(l.name)}</h2><p class="q">${esc(l.q)}</p></div>
+      <div class="cols"><div class="col"><h3>Trends</h3>${l.trends.map(t=>`<div class="it"><b>${esc(t[0])}</b>${esc(t[1])}</div>`).join("")}</div>
+      <div class="col"><h3>Signals</h3>${sigHtml(sigs)}</div>
+      <div class="col"><h3>Technologies</h3>${listHtml(techFor(s.l), techItem)}<h3 style="margin-top:8px">Rules</h3>${listHtml(fwFor(s.l), fwItem)}</div></div>`;
+  } else if (s.type==="col"){
+    const c = COLS.find(x=>x.id===s.c), sigs = SIG.filter(g=>g[6].includes(s.c) && rMatch(g[0]));
+    const players = [...new Map(LAYERS.flatMap(l=>C[l.id][s.c][2]).map(p=>[p[0],p])).values()];
+    h = `<div class="ph"><div class="eyebrow">Whose identity</div><h2>${esc(c.name)}</h2><p class="q">${esc(c.who)}. ${esc(c.line)}</p><div class="meta"><span>${esc(c.size)}</span></div></div>
+      <div class="cols"><div class="col"><h3>By layer</h3>${LAYERS.map(l=>{const x=C[l.id][s.c];return `<div class="it"><b>${l.n} · ${esc(l.name)}${x[3]?` <span class="m">· FA ${x[3]}</span>`:""}</b>${esc(x[1])}</div>`;}).join("")}</div>
+      <div class="col"><h3>Signals</h3>${sigHtml(sigs)}</div>
+      <div class="col"><h3>Who is playing</h3>${playersHtml(players)}<h3 style="margin-top:8px">Rules</h3>${listHtml(FW.filter(f=>f[5].includes(s.c)), fwItem)}</div></div>`;
+  } else if (s.type==="tech"){
+    const t = TECH[s.i];
+    h = `<div class="ph"><div class="eyebrow">Technology · layer ${t[3].map(x=>x.slice(1)).join(" and ")}</div><h2>${esc(t[0])}</h2><p class="q">${esc(t[1])}</p></div>
+      <div class="cols"><div class="col"><h3>Status</h3><div class="it">${esc(t[2])}</div></div><div class="col"><h3>Layers it serves</h3>${t[3].map(id=>{const l=LAYERS.find(x=>x.id===id);return `<div class="it"><b>${l.n} · ${esc(l.name)}</b>${esc(l.q)}</div>`}).join("")}</div><div class="col"><h3>Related rules</h3>${listHtml(FW.filter(f=>f[4].some(x=>t[3].includes(x))).slice(0,5), fwItem)}</div></div>`;
+  } else if (s.type==="fw"){
+    const f = FW[s.i];
+    h = `<div class="ph"><div class="eyebrow">Framework · ${esc(f[1])}</div><h2>${esc(f[0])}</h2><p class="q">${esc(f[2])}</p></div>
+      <div class="cols"><div class="col"><h3>Status, Sep 2026</h3><div class="it">${esc(f[3])}</div></div><div class="col"><h3>Where it applies</h3>${f[4].map(id=>{const l=LAYERS.find(x=>x.id===id);return `<div class="it"><b>${l.n} · ${esc(l.name)}</b>${f[5].map(c=>COLS.find(x=>x.id===c).name).join(", ")}</div>`}).join("")}</div><div class="col"><h3>Technologies involved</h3>${listHtml(TECH.filter(t=>t[3].some(x=>f[4].includes(x))).slice(0,5), techItem)}</div></div>`;
+  }
+  p.innerHTML = h;
+}
+
+function select(sel, scroll){ S.sel = sel; if (S.move) setMove(null, true); mark(); renderPanel(); if (scroll) $("#panel").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth", block:"start"}); }
+function setMove(id, silent){
+  S.move = (S.move===id) ? null : id;
+  document.querySelectorAll("#mvBtns .cb").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.mv===S.move)));
+  const nr = $("#nr");
+  if (S.move){ const mv = MOVES.find(m=>m.id===S.move); nr.className="nr"; nr.innerHTML="<b></b><span></span>"; nr.querySelector("b").textContent=mv.title; nr.querySelector("span").textContent=mv.text; }
+  else { nr.className="nr empty"; nr.textContent="Trace a movement to see how a shift travels across layers and kinds of identity. Click any cell, layer, column, technology or framework to read it."; }
+  if (!silent) mark();
+}
+
+// ---------- events ----------
+function act(e){
+  const t = e.target.closest(".cell,.rowh,.colh,[data-tech],[data-fw]"); if (!t) return;
+  if (t.classList.contains("cell")) select({type:"cell", l:t.dataset.l, c:t.dataset.c}, true);
+  else if (t.classList.contains("rowh")) select({type:"layer", l:t.dataset.layer}, true);
+  else if (t.classList.contains("colh")) select({type:"col", c:t.dataset.col}, true);
+  else if (t.dataset.tech) select({type:"tech", i:+t.dataset.tech}, true);
+  else if (t.dataset.fw) select({type:"fw", i:+t.dataset.fw}, true);
+}
+document.querySelector(".board").addEventListener("click", act);
+document.querySelector(".board").addEventListener("keydown", e => { if ((e.key==="Enter"||e.key===" ") && e.target.matches(".cell,.rowh,.colh")) { e.preventDefault(); act(e); } });
+MOVES.forEach(m => { const b=document.createElement("button"); b.type="button"; b.className="cb"; b.textContent=m.title; b.dataset.mv=m.id; b.setAttribute("aria-pressed","false"); b.onclick=()=>setMove(m.id); $("#mvBtns").appendChild(b); });
+[["all","All"],["US","US"],["UK","UK"],["EU","EU"],["APAC","APAC"],["out","Outside the US"]].forEach(([v,l]) => { const b=document.createElement("button"); b.type="button"; b.className="cb"; b.textContent=l; b.dataset.rg=v; b.setAttribute("aria-pressed",String(v==="all")); b.onclick=()=>{ S.region=v; document.querySelectorAll("#rgBtns .cb").forEach(x=>x.setAttribute("aria-pressed",String(x.dataset.rg===v))); renderPanel(); }; $("#rgBtns").appendChild(b); });
+
+renderMatrix(); renderTech(); renderFw(); mark(); renderPanel();
+})();
+</script>
+
+</body></html>
